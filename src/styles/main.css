@@ -1,0 +1,6 @@
+body { font-family: Arial, sans-serif; margin: 16px; }
+header { margin-bottom: 16px; }
+.grid { display: grid; grid-template-columns: repeat(auto-fill,minmax(180px,1fr)); gap: 12px; }
+.game-card { border: 1px solid #ddd; padding: 8px; border-radius: 6px; }
+form input, form textarea { display:block; margin:8px 0; width:100%; padding:8px; }
+button { padding:8px 12px; cursor:pointer; }
