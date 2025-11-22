@@ -23,7 +23,15 @@ export default function GameForm({ initial = {}, token, onSaved }) {
   return (
     <form onSubmit={handleSubmit}>
       <input placeholder="Título" value={titulo} onChange={e => setTitulo(e.target.value)} />
-      <input placeholder="Plataforma" value={plataforma} onChange={e => setPlataforma(e.target.value)} />
+      <div className="form-select-wrapper">
+        <select className="form-select" value={plataforma} onChange={e => setPlataforma(e.target.value)}>
+          <option value="">Plataforma</option>
+          <option value="Mobile">Mobile</option>
+          <option value="PC">PC</option>
+          <option value="Consola">Consola</option>
+          <option value="Otros">Otros</option>
+        </select>
+      </div>
       <input placeholder="URL portada" value={portadaUrl} onChange={e => setPortadaUrl(e.target.value)} />
       <textarea placeholder="Descripción" value={descripcion} onChange={e => setDescripcion(e.target.value)} />
       <input type="number" placeholder="Horas jugadas" value={horasJugadas} onChange={e => setHorasJugadas(Number(e.target.value))} />

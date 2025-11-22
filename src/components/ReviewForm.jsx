@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { createReview } from "../api/api";
+import { createReview, updateReview } from "../api/api";
 
 function StarRating({ value = 0, onChange }) {
   const stars = [1,2,3,4,5];
@@ -17,18 +17,21 @@ function StarRating({ value = 0, onChange }) {
   );
 }
 
-export default function ReviewForm({ gameId, token, onPosted, game }) {
-  const [titulo, setTitulo] = useState("");
-  const [contenido, setContenido] = useState("");
-  const [estrellas, setEstrellas] = useState(5);
+export default function ReviewForm({ gameId, token, onPosted, game, initial = {} }) {
+  const [titulo, setTitulo] = useState(initial.titulo || "");
+  const [contenido, setContenido] = useState(initial.contenido || "");
+  const [estrellas, setEstrellas] = useState(initial.estrellas || 5);
 
   async function handleSubmit(e) {
     e.preventDefault();
-    const res = await createReview({ juego: gameId, titulo, contenido, estrellas }, token);
+    const payload = { titulo, contenido, estrellas };
+    const res = initial._id ? await updateReview(initial._id, payload, token) : await createReview({ juego: gameId, ...payload }, token);
     if (res._id) {
-      setTitulo("");
-      setContenido("");
-      setEstrellas(5);
+      if (!initial._id) {
+        setTitulo("");
+        setContenido("");
+        setEstrellas(5);
+      }
       if (onPosted) onPosted();
     } else {
       alert(res.msg || "Error al publicar reseña");

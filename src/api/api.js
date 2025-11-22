@@ -8,7 +8,24 @@ async function request(path, method = "GET", body = null, token = null) {
     headers,
     body: body ? JSON.stringify(body) : null
   });
-  return res.json();
+  if (res.status === 204) return { ok: true };
+  const ct = res.headers.get("content-type") || "";
+  if (ct.includes("application/json")) {
+    const data = await res.json();
+    if (!res.ok) {
+      const err = new Error(data.msg || `Error ${res.status}`);
+      err.status = res.status;
+      err.data = data;
+      throw err;
+    }
+    return data;
+  }
+  if (!res.ok) {
+    const err = new Error(`Error ${res.status}`);
+    err.status = res.status;
+    throw err;
+  }
+  return { ok: true };
 }
 
 export const register = (data) => request("/auth/register", "POST", data);
@@ -21,6 +38,7 @@ export const updateGame = (id, data, token) => request(`/games/${id}`, "PUT", da
 export const deleteGame = (id, token) => request(`/games/${id}`, "DELETE", null, token);
 
 export const fetchReviews = (gameId) => request(`/reviews?game=${gameId}`);
+export const fetchUserReviews = (userId) => request(`/reviews?author=${userId}`);
 export const createReview = (data, token) => request("/reviews", "POST", data, token);
 export const updateReview = (id, data, token) => request(`/reviews/${id}`, "PUT", data, token);
 export const deleteReview = (id, token) => request(`/reviews/${id}`, "DELETE", null, token);

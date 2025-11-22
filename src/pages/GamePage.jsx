@@ -10,6 +10,8 @@ export default function GamePage() {
   const [gameData, setGameData] = useState(null);
   const token = localStorage.getItem("token");
   const [showReviewForm, setShowReviewForm] = useState(false);
+  const [rq, setRq] = useState("");
+  const [rsort, setRsort] = useState("newest");
 
   useEffect(() => {
     fetchGame(id).then(data => setGameData(data));
@@ -20,11 +22,25 @@ export default function GamePage() {
   if (!gameData) return <p>Cargando...</p>;
 
   const { game, reviews } = gameData;
+  const filteredReviews = [...(reviews||[])]
+    .filter(r => rq ? ((r.contenido||"").toLowerCase().includes(rq.toLowerCase()) || (r.titulo||"").toLowerCase().includes(rq.toLowerCase())) : true)
+    .sort((a,b) => {
+      if (rsort === "newest") return new Date(b.createdAt) - new Date(a.createdAt);
+      if (rsort === "oldest") return new Date(a.createdAt) - new Date(b.createdAt);
+      if (rsort === "stars_desc") return (b.estrellas||0) - (a.estrellas||0);
+      if (rsort === "stars_asc") return (a.estrellas||0) - (b.estrellas||0);
+      return 0;
+    });
 
   return (
     <div>
       <div className="game-info-card">
-        <img src={(game.portadaUrl && String(game.portadaUrl).trim()) ? game.portadaUrl : "/placeholder.svg"} alt={game.titulo} className="game-info-cover" onError={(e) => { e.currentTarget.src = "/placeholder.svg"; }} />
+        <img
+          src={(game.portadaUrl && String(game.portadaUrl).trim()) ? game.portadaUrl : "/placeholder.svg"}
+          alt={game.titulo}
+          className="game-info-cover"
+          onError={(e) => { e.currentTarget.src = "/placeholder.svg"; }}
+        />
         <h2 className="game-info-title">{game.titulo}</h2>
         <p className="game-info-desc">{game.descripcion}</p>
         <p>Plataforma: {game.plataforma}</p>
@@ -33,7 +49,16 @@ export default function GamePage() {
       </div>
 
       <h3>Reseñas</h3>
-      <ReviewList reviews={reviews} onDeleted={() => fetchGame(id).then(setGameData)} />
+      <div className="toolbar controls">
+        <div className="input-with-icon"><input className="control-input" placeholder="Buscar reseña..." value={rq} onChange={e => setRq(e.target.value)} /></div>
+        <select className="control-select" value={rsort} onChange={e => setRsort(e.target.value)}>
+          <option value="newest">Recientes (Más nuevas)</option>
+          <option value="oldest">Antiguas (Más antiguas)</option>
+          <option value="stars_desc">Más estrellas</option>
+          <option value="stars_asc">Menos estrellas</option>
+        </select>
+      </div>
+      <ReviewList reviews={filteredReviews} onDeleted={() => fetchGame(id).then(setGameData)} />
       {token ? (
         <div>
           <button className="btn btn-primary" onClick={() => setShowReviewForm(v => !v)}>

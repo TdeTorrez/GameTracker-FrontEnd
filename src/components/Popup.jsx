@@ -7,7 +7,7 @@ export default function Popup({ open = false, title, onClose, children }) {
       <div className="popup" onClick={e => e.stopPropagation()}>
         {title && <div className="popup-header">
           <div className="popup-title">{title}</div>
-          <button className="popup-close" onClick={onClose}><span>Close</span></button>
+          <button className="popup-close" onClick={onClose}><span>✕</span></button>
         </div>}
         <div className="popup-content">
           {children}

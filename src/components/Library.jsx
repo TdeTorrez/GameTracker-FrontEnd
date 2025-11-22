@@ -1,8 +1,8 @@
 import React from "react";
 import GameCard from "./GameCard";
 
-export default function Library({ games = [], personal = false, onDelete, onEdit, token }) {
-  if (!games.length) return <p>No hay juegos aun.</p>;
+export default function Library({ games = [], personal = false, onDelete, onEdit, token, emptyMessage }) {
+  if (!games.length) return <p>{emptyMessage || "No hay juegos aun."}</p>;
   return (
     <div className="grid">
       {games.map(g => (

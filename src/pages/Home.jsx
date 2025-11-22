@@ -25,9 +25,9 @@ export default function Home({ search = "", platform = "" }) {
   return (
     <div>
       <h2>Catálogo de juegos</h2>
-      <div className="toolbar">
-        <input placeholder="Buscar..." value={q} onChange={e => { setQ(e.target.value); setPage(1); }} />
-        <select value={sort} onChange={e => setSort(e.target.value)}>
+      <div className="toolbar controls">
+        <div className="input-with-icon"><input className="control-input" placeholder="Buscar..." value={q} onChange={e => { setQ(e.target.value); setPage(1); }} /></div>
+        <select className="control-select" value={sort} onChange={e => setSort(e.target.value)}>
           <option value="recent">Más recientes</option>
           <option value="rating">Mejor puntuados</option>
           <option value="hours">Más horas</option>
