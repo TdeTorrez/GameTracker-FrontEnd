@@ -1,4 +1,4 @@
-const API_URL = process.env.REACT_APP_API_URL || "http://localhost:4000/api";
+const API_URL = (import.meta.env?.VITE_API_URL) || "http://localhost:4000/api";
 
 async function request(path, method = "GET", body = null, token = null) {
   const headers = { "Content-Type": "application/json" };

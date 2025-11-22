@@ -27,11 +27,11 @@ export default function GameForm({ initial = {}, token, onSaved }) {
       <input placeholder="URL portada" value={portadaUrl} onChange={e => setPortadaUrl(e.target.value)} />
       <textarea placeholder="Descripción" value={descripcion} onChange={e => setDescripcion(e.target.value)} />
       <input type="number" placeholder="Horas jugadas" value={horasJugadas} onChange={e => setHorasJugadas(Number(e.target.value))} />
-      <label>
-        <input type="checkbox" checked={completado} onChange={e => setCompletado(e.target.checked)} />
-        Completado
-      </label>
-      <button type="submit">Guardar</button>
+      <div className="toggle">
+        <input id="completedToggle" type="checkbox" checked={completado} onChange={e => setCompletado(e.target.checked)} />
+        <label htmlFor="completedToggle">Completado</label>
+      </div>
+      <button type="submit" className="btn btn-primary">Guardar</button>
     </form>
   );
 }

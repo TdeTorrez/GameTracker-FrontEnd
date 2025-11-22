@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { login } from "../api/api";
 import { useNavigate, Link } from "react-router-dom";
+import Popup from "../components/Popup";
 
 export default function Login() {
   const [correo, setCorreo] = useState("");
@@ -20,14 +21,13 @@ export default function Login() {
   }
 
   return (
-    <div>
-      <h2>Iniciar sesión</h2>
+    <Popup open title="Iniciar sesión" onClose={() => navigate("/") }>
       <form onSubmit={handleSubmit}>
         <input placeholder="Correo" value={correo} onChange={e => setCorreo(e.target.value)} />
         <input placeholder="Contraseña" type="password" value={password} onChange={e => setPassword(e.target.value)} />
-        <button type="submit">Entrar</button>
+        <button type="submit" className="btn btn-primary">Entrar</button>
       </form>
       <p>¿No tienes cuenta? <Link to="/register">Regístrate</Link></p>
-    </div>
+    </Popup>
   );
 }
